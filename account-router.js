@@ -45,4 +45,40 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+
+  try {
+    const account = await db("accounts")
+      .where({ id })
+      .update(changes);
+
+    if (account) {
+      res.status(200).json({ updated: account });
+    } else {
+      res.status(404).json({ message: "could not find account" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: "could not update account" });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const account = await db("accounts")
+      .where({ id })
+      .del();
+    if (account) {
+      res.status(200).json({ message: "deleted account " });
+    } else {
+      res.status(404).json({ message: "cound not find" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: "could not delete the account" });
+  }
+});
+
 module.exports = router;
