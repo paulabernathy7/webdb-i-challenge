@@ -34,4 +34,15 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.post("/", async (req, res) => {
+  const accountData = req.body;
+
+  try {
+    const account = await db("accounts").insert(accountData);
+    res.status(201).json(account);
+  } catch (err) {
+    res.status(500).json({ message: "could not add account" });
+  }
+});
+
 module.exports = router;
